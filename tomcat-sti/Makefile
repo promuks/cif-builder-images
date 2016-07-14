@@ -1,5 +1,5 @@
 
-IMAGE_NAME = tpbeta-tomcat-sti
+IMAGE_NAME = tomcat-sti
 
 build:
 	docker build -t $(IMAGE_NAME) .

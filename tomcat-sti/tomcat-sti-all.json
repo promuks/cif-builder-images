@@ -33,7 +33,7 @@
             "source": {
                "type": "Git",
                "git": {
-                  "uri": "https://github.com/promuks/tpbeta.git",
+                  "uri": "https://github.com/promuks/cif-builder-images.git",
                   "ref": "master"
                },
                "contextDir": "tomcat-sti"
@@ -51,7 +51,7 @@
             "output": {
                "to": {
                   "kind": "ImageStreamTag",
-                  "name": "tpbeta-tomcat-sti:latest"
+                  "name": "tomcat-sti:latest"
                }
             },
             "resources": {}
@@ -71,7 +71,7 @@
          "kind": "ImageStream",
          "apiVersion": "v1",
          "metadata": {
-            "name": "tpbeta-tomcat-sti"
+            "name": "tomcat-sti"
          },
          "spec": {
             "dockerImageRepository": "",
@@ -81,8 +81,8 @@
                   "annotations": {
                      "description": "Tomcat STI image",
                      "iconClass": "icon-jboss",
-                     "tags": "builder,tomcat,java,maven,angular",
-                     "supports": "tomcat,java:8,maven:3,angular:2.6",
+                     "tags": "builder,tomcat,java,rhel,angular",
+                     "supports": "tomcat,java:1.8.0_45,rhel:7.2,angular:2.6",
                      "version": "1.0"
                   }
                }

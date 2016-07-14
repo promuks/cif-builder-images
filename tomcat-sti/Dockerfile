@@ -40,10 +40,10 @@ ENV PATH=/opt/maven/bin/:$PATH
 
 ENV BUILDER_VERSION 1.0
 
-LABEL io.k8s.description="Platform for building Spring Boot applications with maven or gradle" \
-      io.k8s.display-name="Spring Boot builder 1.0" \
+LABEL io.k8s.description="Platform for building Angular applications with Npm , Bower and Grunt" \
+      io.k8s.display-name="Tomcat builder 1.0" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,maven-3,gradle-2.6,springboot"
+      io.openshift.tags="builder,tomcat"
 
 # TODO (optional): Copy the builder files into /opt/openshift
 # COPY ./<builder_folder>/ /opt/openshift/
