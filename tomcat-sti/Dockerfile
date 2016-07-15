@@ -13,9 +13,21 @@ ENV CATALINA_HOME /usr/local/tomcat
 RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-7.noarch.rpm 
 #RUN rpm -q git-all
 
-RUN yum install -y  --enablerepo rhel-7-server-optional-rpms --enablerepo rhel-7-server-rpms   \
-    wget tar unzip bzip2 bc which lsof java-1.8.0-openjdk java-1.8.0-openjdk-devel && \
-    wget http://apache.spinellicreations.com/tomcat/tomcat-8/v8.0.36/bin/apache-tomcat-8.0.36.tar.gz && \
+RUN yum install -y  --enablerepo rhel-7-server-optional-rpms --enablerepo rhel-7-server-rpms wget tar unzip bzip2 bc which lsof
+
+ENV JAVA_VERSION 8u45
+ENV BUILD_VERSION b14
+
+# Upgrading system
+RUN yum -y upgrade
+RUN yum -y install wget
+
+# Downloading Java
+RUN wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/$JAVA_VERSION-$BUILD_VERSION/jdk-$JAVA_VERSION-linux-x64.rpm" -O /tmp/jdk-8-linux-x64.rpm
+
+RUN yum -y install /tmp/jdk-8-linux-x64.rpm
+
+RUN wget http://apache.spinellicreations.com/tomcat/tomcat-8/v8.0.36/bin/apache-tomcat-8.0.36.tar.gz && \
 	tar -xvf apache-tomcat-8.0.36.tar.gz && \
 	rm apache-tomcat*.tar.gz && \
 	mv apache-tomcat* ${CATALINA_HOME} && \	
