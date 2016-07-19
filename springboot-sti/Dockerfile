@@ -52,9 +52,18 @@ COPY ./.sti/bin/ /usr/local/sti
 
 RUN chown -R 1001:1001 /opt/openshift
 
+RUN chmod -R a+rwX /usr/local/sti/assemble
+RUN chmod -R a+rwX /usr/local/sti/run
+RUN chmod -R a+rwX /usr/local/sti/save-artifacts
+RUN chmod -R a+rwX /usr/local/sti/usage
+
+RUN chmod +x /usr/local/sti/assemble /usr/local/sti/run /usr/local/sti/save-artifacts /usr/local/sti/usage
+
+
 ADD ldapcert /usr/local/certs
 ADD scripts/ /usr/local/certs
 RUN chmod -R ug+rwx /usr/local/certs/addldapcert.sh
+RUN chmod +x /usr/local/certs/addldapcert.sh
 RUN /usr/local/certs/addldapcert.sh
 
 # This default user is created in the openshift/base-centos7 image
