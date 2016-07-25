@@ -1,0 +1,225 @@
+{
+  "kind": "List",
+  "apiVersion": "v1",
+  "metadata": {},
+  "items": [
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "fareclassservice",
+        "generation": 1,
+        "labels": {
+          "app": "fareclassservice"
+        }
+      },
+      "spec": {
+        "tags": [
+          {
+            "name": "latest",
+            "from": {
+              "kind": "ImageStreamTag",
+              "name": "fareclassservice:latest"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "fareclassservice",
+        "labels": {
+          "app": "fareclassservice"
+        }
+      },
+      "spec": {
+        "strategy": {
+          "type": "Rolling",
+          "rollingParams": {
+            "updatePeriodSeconds": 1,
+            "intervalSeconds": 1,
+            "timeoutSeconds": 600,
+            "maxUnavailable": "25%",
+            "maxSurge": "25%"
+          },
+          "resources": {}
+        },
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "type": "ImageChange",
+            "imageChangeParams": {
+              "automatic": true,
+              "containerNames": [
+                "fareclassservice"
+              ],
+              "from": {
+                "kind": "ImageStreamTag",
+                "name": "fareclassservice:latest"
+              }
+            }
+          }
+        ],
+        "replicas": 1,
+        "test": false,
+        "selector": {
+          "app": "fareclassservice",
+          "deploymentconfig": "fareclassservice"
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "fareclassservice",
+              "deploymentconfig": "fareclassservice"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "name": "fareclassservice",
+                "image": "fareclassservice",
+                "ports": [
+                  {
+                    "containerPort": 8080,
+                    "protocol": "TCP"
+                  }
+                ],
+                "env": [
+                   {
+						"name": "db2driver",
+						"valueFrom": {
+							"configMapKeyRef": {
+								"name": "db2config",
+								"key": "db2.db.driver"
+							}
+						}
+					},
+					{
+						"name": "db2url",
+						"valueFrom": {
+							"configMapKeyRef": {
+								"name": "db2config",
+								"key": "db2.db.url"
+							}
+						}
+					},
+					{
+						"name": "db2user",
+						"valueFrom": {
+							"configMapKeyRef": {
+								"name": "db2config",
+								"key": "db2.db.user"
+							}
+						}
+					},
+					{
+						"name": "db2password",
+						"valueFrom": {
+							"configMapKeyRef": {
+								"name": "db2config",
+								"key": "db2.db.password"
+							}
+						}
+					},
+					{
+						"name": "mysqldriver",
+						"valueFrom": {
+							"configMapKeyRef": {
+								"name": "mysqlconfig",
+								"key": "mysql.db.driver"
+							}
+						}
+					},
+					{
+						"name": "mysqlurl",
+						"valueFrom": {
+							"configMapKeyRef": {
+								"name": "mysqlconfig",
+								"key": "mysql.db.url"
+							}
+						}
+					},
+					{
+						"name": "mysqluser",
+						"valueFrom": {
+							"configMapKeyRef": {
+								"name": "mysqlconfig",
+								"key": "mysql.db.user"
+							}
+						}
+					},
+					{
+						"name": "mysqlpassword",
+						"valueFrom": {
+							"configMapKeyRef": {
+								"name": "mysqlconfig",
+								"key": "mysql.db.password"
+							}
+						}
+					}
+                ],
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "imagePullPolicy": "Always"
+              }
+            ],
+            "restartPolicy": "Always",
+            "terminationGracePeriodSeconds": 30,
+            "dnsPolicy": "ClusterFirst",
+            "securityContext": {}
+          }
+        }
+      }
+    },
+    {
+      "kind": "Service",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "fareclassservice",
+        "labels": {
+          "app": "fareclassservice"
+        }
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "8080-tcp",
+            "protocol": "TCP",
+            "port": 9993,
+            "targetPort": 9993
+          }
+        ],
+        "selector": {
+          "app": "fareclassservice",
+          "deploymentconfig": "fareclassservice"
+        },
+        "type": "ClusterIP",
+        "sessionAffinity": "None"
+      }
+    },
+    {
+      "kind": "Route",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "fareclassservice",
+        "labels": {
+          "app": "fareclassservice"
+        }
+      },
+      "spec": {
+        "host": "",
+        "to": {
+          "kind": "Service",
+          "name": "fareclassservice"
+        },
+        "port": {
+          "targetPort": "8080-tcp"
+        }
+      }
+    }
+  ]
+}
