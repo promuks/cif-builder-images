@@ -1,0 +1,232 @@
+{
+  "kind": "List",
+  "apiVersion": "v1",
+  "metadata": {},
+  "items": [
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "cifuiservice",
+        "generation": 1,
+        "labels": {
+          "app": "cifuiservice"
+        }
+      },
+      "spec": {
+        "tags": [
+          {
+            "name": "latest",
+            "from": {
+              "kind": "ImageStreamTag",
+              "name": "cifuiservice:latest"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "cifuiservice",
+        "labels": {
+          "app": "cifuiservice"
+        }
+      },
+      "spec": {
+        "strategy": {
+          "type": "Rolling",
+          "rollingParams": {
+            "updatePeriodSeconds": 1,
+            "intervalSeconds": 1,
+            "timeoutSeconds": 600,
+            "maxUnavailable": "25%",
+            "maxSurge": "25%"
+          },
+          "resources": {}
+        },
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "type": "ImageChange",
+            "imageChangeParams": {
+              "automatic": true,
+              "containerNames": [
+                "cifuiservice"
+              ],
+              "from": {
+                "kind": "ImageStreamTag",
+                "name": "cifuiservice:latest"
+              }
+            }
+          }
+        ],
+        "replicas": 1,
+        "test": false,
+        "selector": {
+          "app": "cifuiservice",
+          "deploymentconfig": "cifuiservice"
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "cifuiservice",
+              "deploymentconfig": "cifuiservice"
+            }
+          },
+          "spec": {
+			"volumes": [
+			  {
+                "name": "valveconfig",
+                "configMap": {
+                  
+                    "name": "valveconfig",
+                    "items": [
+						{
+							"key": "valve.properties",
+							"path": "valve.properties"
+						},
+						{
+							"key": "ldapconn.properties",
+							"path": "ldap_conn.properties"
+						},
+						{
+							"key": "carrierimposedfeessecuritymapping.txt",
+							"path": "CarrierImposedFees_security_mapping.txt"
+						},
+						{
+							"key": "atpcogrouprole.properties",
+							"path": "atpco_group_role.properties"
+						}
+					]
+                  
+                }
+			  }
+			],
+            "containers": [
+              {
+                "name": "cifuiservice",
+                "image": "fareclassservice",
+                "ports": [
+                  {
+                    "containerPort": 8080,
+                    "protocol": "TCP"
+                  }
+                ],
+                "env": [
+                    {
+						"name": "container",
+						"value": "docker"
+					},
+					{
+						"name": "PATH",
+						"value": "/opt/maven/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+					},
+					{
+						"name": "MAVEN_VERSION",
+						"value": "3.3.9"
+					},
+					{
+						"name": "JAVA_VERSION",
+						"value": "8u45"
+					},
+					{
+						"name": "BUILD_VERSION",
+						"value": "b14"
+					},
+					{
+						"name": "BUILDER_VERSION",
+						"value": "1.0"
+					},
+					{
+						"name": "OPENSHIFT_BUILD_NAME",
+						"value": "springboot-sti-1"
+					},
+					{
+						"name": "OPENSHIFT_BUILD_NAMESPACE",
+						"value": "buildstest"
+					},
+					{
+						"name": "OPENSHIFT_BUILD_SOURCE",
+						"value": "https://github.com/promuks/cif-builder-images.git"
+					},
+					{
+						"name": "OPENSHIFT_BUILD_REFERENCE",
+						"value": "master"
+					},
+					{
+						"name": "OPENSHIFT_BUILD_COMMIT",
+						"value": "cee9984c1e6024f0d10e3c44a3ae7c9b7245fd7a"
+					}
+					
+                ],
+                "resources": {},
+				"volumeMounts":  [
+                    {
+						"name": "valveconfig",
+						"mountPath": "/usr/local/config"
+					}
+				],
+                "terminationMessagePath": "/dev/termination-log",
+                "imagePullPolicy": "Always"
+              }
+            ],
+            "restartPolicy": "Always",
+            "terminationGracePeriodSeconds": 30,
+            "dnsPolicy": "ClusterFirst",
+            "securityContext": {}
+          }
+        }
+      }
+    },
+    {
+      "kind": "Service",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "fareclassservice",
+        "labels": {
+          "app": "fareclassservice"
+        }
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "8080-tcp",
+            "protocol": "TCP",
+            "port": 9993,
+            "targetPort": 9993
+          }
+        ],
+        "selector": {
+          "app": "fareclassservice",
+          "deploymentconfig": "fareclassservice"
+        },
+        "type": "ClusterIP",
+        "sessionAffinity": "None"
+      }
+    },
+    {
+      "kind": "Route",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "fareclassservice",
+        "labels": {
+          "app": "fareclassservice"
+        }
+      },
+      "spec": {
+        "host": "",
+        "to": {
+          "kind": "Service",
+          "name": "fareclassservice"
+        },
+        "port": {
+          "targetPort": "8080-tcp"
+        }
+      }
+    }
+  ]
+}

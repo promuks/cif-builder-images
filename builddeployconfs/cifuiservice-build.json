@@ -1,0 +1,70 @@
+{
+  "kind": "List",
+  "apiVersion": "v1",
+  "metadata": {},
+  "items": [
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "cifuiservice",
+        "labels": {
+          "app": "cifuiservice"
+        }
+      },
+      "spec": {
+        "triggers": [
+          {
+            "type": "GitHub",
+            "github": {
+              "secret": "secret"
+            }
+          },
+          {
+            "type": "Generic",
+            "generic": {
+              "secret": "secret"
+            }
+          },
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "type": "ImageChange",
+            "imageChange": {}
+          }
+        ],
+	   "source": {
+			"type": "Git",
+			"git": {
+				"uri": "https://atphg.atpco.org/gitrepos/CIF_UI_Service",
+				"ref": "develop"
+			},
+			"contextDir": "/cif-ui-service",
+			"sourceSecret": {
+				"name": "scmsecret"
+			},
+			"secrets": null
+		},
+		"strategy": {
+			"type": "Source",
+			"sourceStrategy": {
+				"from": {
+					"kind": "ImageStreamTag",
+					"namespace": "buildstest",
+					"name": "springboot-sti:latest"
+				}
+			}
+		},
+        "output": {
+          "to": {
+            "kind": "ImageStreamTag",
+            "name": "cifuiservice:latest"
+          }
+        },
+        "resources": {},
+        "postCommit": {}
+      }
+    }
+  ]
+}
