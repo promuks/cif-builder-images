@@ -186,9 +186,9 @@
       "kind": "Service",
       "apiVersion": "v1",
       "metadata": {
-        "name": "fareclassservice",
+        "name": "cifuiservice",
         "labels": {
-          "app": "fareclassservice"
+          "app": "cifuiservice"
         }
       },
       "spec": {
@@ -196,13 +196,13 @@
           {
             "name": "8080-tcp",
             "protocol": "TCP",
-            "port": 9993,
-            "targetPort": 9993
+            "port": 9991,
+            "targetPort": 9991
           }
         ],
         "selector": {
-          "app": "fareclassservice",
-          "deploymentconfig": "fareclassservice"
+          "app": "cifuiservice",
+          "deploymentconfig": "cifuiservice"
         },
         "type": "ClusterIP",
         "sessionAffinity": "None"
@@ -212,16 +212,16 @@
       "kind": "Route",
       "apiVersion": "v1",
       "metadata": {
-        "name": "fareclassservice",
+        "name": "cifuiservice",
         "labels": {
-          "app": "fareclassservice"
+          "app": "cifuiservice"
         }
       },
       "spec": {
         "host": "",
         "to": {
           "kind": "Service",
-          "name": "fareclassservice"
+          "name": "cifuiservice"
         },
         "port": {
           "targetPort": "8080-tcp"
