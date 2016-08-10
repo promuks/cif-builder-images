@@ -10,7 +10,7 @@ MAINTAINER Mukul Nadkarni <mnadkarni@atpco.net>
 ENV MAVEN_VERSION 3.3.9
 ENV CATALINA_HOME /usr/local/tomcat
 
-RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-7.noarch.rpm 
+RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm 
 #RUN rpm -q git-all
 
 RUN yum install -y  --enablerepo rhel-7-server-optional-rpms --enablerepo rhel-7-server-rpms wget tar unzip bzip2 bc which lsof
@@ -30,14 +30,14 @@ RUN yum -y install /tmp/jdk-8-linux-x64.rpm
 RUN wget http://apache.spinellicreations.com/tomcat/tomcat-8/v8.0.36/bin/apache-tomcat-8.0.36.tar.gz && \
 	tar -xvf apache-tomcat-8.0.36.tar.gz && \
 	rm apache-tomcat*.tar.gz && \
-	mv apache-tomcat* ${CATALINA_HOME} && \	
+	mv apache-tomcat* ${CATALINA_HOME} && \
     mkdir -p /opt/openshift && \
     mkdir -p /opt/app-root/source && chmod -R a+rwX /opt/app-root/source && \
     mkdir -p /opt/s2i/destination && chmod -R a+rwX /opt/s2i/destination && \
     mkdir -p /opt/app-root/src && chmod -R a+rwX /opt/app-root/src
 RUN yum -y install git; yum clean all
 RUN git config --global url."https://".insteadOf git://
-RUN git config --global user.email "mukul37@gmail.com" 
+RUN git config --global user.email "mukul37@gmail.com"
 RUN git config --global user.name "Mukul"
 #RUN yum -y update; yum clean all
 RUN yum -y install npm; yum clean all
@@ -45,7 +45,7 @@ RUN yum -y install npm; yum clean all
 
 RUN npm install -g  bower grunt-cli tsd
 
-#RUN bower install --allow-root  
+#RUN bower install --allow-root
 
 ENV PATH=/opt/maven/bin/:$PATH
 
@@ -69,7 +69,7 @@ ADD scripts/ /usr/local/tomcat/bin
 ADD ldapcert /usr/local/tomcat/certs
 RUN useradd -u 1001 testac
 RUN chown -R 1001:1001 /opt/openshift
-#RUN chown -R 1001:1001 /usr/local/sti/* 
+#RUN chown -R 1001:1001 /usr/local/sti/*
 
 RUN chown -R 1001:0 /usr/local/tomcat
 
