@@ -10,10 +10,20 @@ MAINTAINER Mukul Nadkarni <mnadkarni@atpco.net>
 ENV MAVEN_VERSION 3.3.9
 ENV CATALINA_HOME /usr/local/tomcat
 
-RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm 
+#RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm 
 #RUN rpm -q git-all
 
-RUN yum install -y  --enablerepo rhel-7-server-optional-rpms --enablerepo rhel-7-server-rpms wget tar unzip bzip2 bc which lsof
+#RUN yum install -y  --enablerepo rhel-7-server-optional-rpms --enablerepo rhel-7-server-rpms wget tar unzip bzip2 bc which lsof
+RUN yum-config-manager --enable rhel-server-rhscl-7-rpms && \
+    yum-config-manager --enable rhel-7-server-optional-rpms && \
+    yum-config-manager --disable epel >/dev/null || : && \
+    INSTALL_PKGS="nodejs010 nodejs010-nodejs-nodemon wget tar bzip2 nss_wrapper" && \
+    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS && \
+    yum clean all -y
+    
+    
+
 
 ENV JAVA_VERSION 8u45
 ENV BUILD_VERSION b14
@@ -21,6 +31,8 @@ ENV BUILD_VERSION b14
 # Upgrading system
 RUN yum -y upgrade
 RUN yum -y install wget
+
+
 
 # Downloading Java
 RUN wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/$JAVA_VERSION-$BUILD_VERSION/jdk-$JAVA_VERSION-linux-x64.rpm" -O /tmp/jdk-8-linux-x64.rpm
