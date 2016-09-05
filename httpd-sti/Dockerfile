@@ -9,17 +9,11 @@ RUN yum -y install httpd; yum clean all
 RUN echo "Apache" >> /var/www/html/index.html
 
 RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm 
-RUN yum install -y  --enablerepo rhel-7-server-optional-rpms --enablerepo rhel-7-server-rpms wget tar unzip bzip2 bc which lsof
-    
-# Upgrading system
-RUN yum -y upgrade
-RUN yum -y install wget
-
-
-RUN yum -y install git; yum clean all
-RUN git config --global url."https://".insteadOf git://
-RUN git config --global user.email "mukul37@gmail.com" 
-RUN git config --global user.name "Mukul"
+RUN yum install -y  --enablerepo rhel-7-server-optional-rpms --enablerepo rhel-7-server-rpms wget tar unzip bzip2 which  && \
+    yum -y install git; yum clean all  && \
+    git config --global url."https://".insteadOf git://   && \
+    git config --global user.email "mukul37@gmail.com"   && \
+    git config --global user.name "Mukul"
 
 RUN yum -y install npm; yum clean all
 
@@ -46,8 +40,7 @@ LABEL io.openshift.s2i.scripts-url=image:///usr/local/sti
 #LABEL io.openshift.s2i.destination=image:///usr/local/src
 
 COPY .sti/bin/ /usr/local/sti
-ADD scripts/ /usr/local/tomcat/bin
-ADD ldapcert /usr/local/tomcat/certs
+
 RUN useradd -u 1001 testac
 RUN chown -R 1001:1001 /opt/openshift
 #RUN chown -R 1001:1001 /usr/local/sti/* 
@@ -59,9 +52,9 @@ RUN chmod -R a+rwX /usr/local/sti/assemble
 RUN chmod -R a+rwX /usr/local/sti/run
 RUN chmod -R a+rwX /usr/local/sti/save-artifacts
 RUN chmod -R a+rwX /usr/local/sti/usage
-RUN chmod -R ug+rwx /usr/local/tomcat/bin/addldapcert.sh
+
 RUN chmod +x /usr/local/sti/assemble /usr/local/sti/run /usr/local/sti/save-artifacts /usr/local/sti/usage
-RUN /usr/local/tomcat/bin/addldapcert.sh
+
 
 # This default user is created in the openshift/base-centos7 image
 USER 1001
