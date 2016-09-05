@@ -8,6 +8,9 @@ RUN yum -y update; yum clean all
 RUN yum -y install httpd; yum clean all
 RUN echo "Apache" >> /var/www/html/index.html
 
+RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm 
+RUN yum install -y  --enablerepo rhel-7-server-optional-rpms --enablerepo rhel-7-server-rpms wget tar unzip bzip2 bc which lsof
+    
 # Upgrading system
 RUN yum -y upgrade
 RUN yum -y install wget
