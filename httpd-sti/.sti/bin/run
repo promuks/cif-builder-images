@@ -7,4 +7,7 @@
 #	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
 #
 
-exec /usr/local/tomcat/bin/catalina.sh run
+#exec /usr/local/tomcat/bin/catalina.sh run
+rm -rf /run/httpd/*
+
+exec /usr/sbin/apachectl -D FOREGROUND
