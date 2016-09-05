@@ -1,0 +1,94 @@
+{
+   "kind": "List",
+   "apiVersion": "v1",
+   "metadata": {
+      "name": "httpd-sti"
+   },
+   "items": [
+      {
+         "kind": "BuildConfig",
+         "apiVersion": "v1",
+         "metadata": {
+            "name": "httpd-sti"
+         },
+         "spec": {
+            "triggers": [
+               {
+                  "type": "GitHub",
+                  "github": {
+                     "secret": "secret"
+                  }
+               },
+               {
+                  "type": "Generic",
+                  "generic": {
+                     "secret": "secret"
+                  }
+               },
+               {
+                  "type": "ImageChange",
+                  "imageChange": {}
+               }
+            ],
+            "source": {
+               "type": "Git",
+               "git": {
+                  "uri": "https://github.com/promuks/cif-builder-images.git",
+                  "ref": "httpd"
+               },
+               "contextDir": "httpd-sti"
+            },
+            "strategy": {
+               "type": "Docker",
+               "dockerStrategy": {
+                  "forcePull": true,
+                  "from": {
+                     "kind": "ImageStreamTag",
+                     "name": "rhel7.2:latest"
+                  }
+               }
+            },
+            "output": {
+               "to": {
+                  "kind": "ImageStreamTag",
+                  "name": "httpd-sti:latest"
+               }
+            },
+            "resources": {}
+         }
+      },
+      {
+         "kind": "ImageStream",
+         "apiVersion": "v1",
+         "metadata": {
+            "name": "rhel7.2"
+         },
+         "spec": {
+            "dockerImageRepository": "registry.access.redhat.com/rhel7.2:latest"
+         }
+      },
+      {
+         "kind": "ImageStream",
+         "apiVersion": "v1",
+         "metadata": {
+            "name": "httpd-sti"
+         },
+         "spec": {
+            "dockerImageRepository": "",
+            "tags": [
+               {
+                  "name": "latest",
+                  "annotations": {
+                     "description": "httpd STI image",
+                     "iconClass": "icon-jboss",
+                     "tags": "builder,httpd,java,rhel,angular",
+                     "supports": "httpd,java:1.8.0_45,rhel:7.2,angular:2.6",
+                     "version": "1.0"
+                  }
+               }
+            ]
+         }
+      } 
+
+   ]
+}
