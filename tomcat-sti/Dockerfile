@@ -9,7 +9,8 @@ MAINTAINER Mukul Nadkarni <mnadkarni@atpco.net>
 # Install build tools on top of base image
 # Java jdk 8, Maven 3.3
 ENV CATALINA_HOME /usr/local/tomcat
-ENV JAVA_VERSION 8u45; BUILD_VERSION b14
+ENV JAVA_VERSION 8u45
+ENV BUILD_VERSION b14
 
 
 
