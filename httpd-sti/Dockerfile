@@ -54,15 +54,41 @@ RUN chmod -R a+rwX /usr/local/sti/save-artifacts
 RUN chmod -R a+rwX /usr/local/sti/usage
 
 RUN chmod +x /usr/local/sti/assemble /usr/local/sti/run /usr/local/sti/save-artifacts /usr/local/sti/usage
-RUN chmod +x /run/httpd
-RUN chmod +x /run/httpd/*
-
-
-
+#RUN chmod +x /run/httpd
+#RUN chmod +x /run/httpd/*
 
 # Set the default port for applications built using this image
-EXPOSE 80
+# TODO: Set the default port for applications built using this image
+EXPOSE 8080
 
+# TODO: Set the default CMD for the image
+# CMD ["usage"]
+# In order to drop the root user, we have to make some directories world
+# writeable as OpenShift default security model is to run the container under
+# random UID.
+# RUN sed -i -f /opt/app-root/etc/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf && \
+# head -n151 /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf | tail -n1 | grep "AllowOverride All" || exit && \
+RUN sed -i \
+    -e 's/^Listen 80/Listen 0.0.0.0:8080/' \
+    -e 's/^User apache/User default/' \
+    -e 's/^Group apache/Group root/' \
+    -e 's%^DocumentRoot "/var/www/html"%DocumentRoot "/opt/app-root/src"%' \
+    -e 's%^<Directory "/var/www/html"%<Directory "/opt/app-root/src"%' \
+    -e 's%^<Directory "/var/html"%<Directory "/opt/app-root/src"%' \
+    -e 's%^ErrorLog "logs/error_log"%ErrorLog "/tmp/error_log"%' \
+    -e 's%CustomLog "logs/access_log"%CustomLog "|/usr/bin/cat"%' \
+    -e '151s%AllowOverride None%AllowOverride All%' \
+    /etc/httpd/conf/httpd.conf && \
+    head -n151 /etc/httpd/conf/httpd.conf | tail -n1 | grep "AllowOverride All" || exit && \
+    mkdir /tmp/sessions && \
+    chmod -R a+rwx /var/run/httpd && \
+    chmod -R a+rwx /tmp/sessions && \
+    chown -R 1001:0 /opt/app-root /tmp/sessions
+
+
+
+
+USER 1001
 # Set the default CMD for the image
 # CMD ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/opt/openshift/app.jar"]
 CMD ["usage"]
