@@ -83,7 +83,7 @@ RUN sed -i \
     mkdir /tmp/sessions && \
     chmod -R a+rwx /var/run/httpd && \
     chmod -R a+rwx /tmp/sessions && \
-    chown -R 1001:0 /opt/app-root /tmp/sessions
+    chown -R 1001:0  /tmp/sessions
 
 
 
