@@ -54,6 +54,8 @@ RUN chmod -R a+rwX /usr/local/sti/save-artifacts
 RUN chmod -R a+rwX /usr/local/sti/usage
 
 RUN chmod +x /usr/local/sti/assemble /usr/local/sti/run /usr/local/sti/save-artifacts /usr/local/sti/usage
+RUN chmod +x /run/httpd
+RUN chmod +x /run/httpd/*
 
 
 # This default user is created in the openshift/base-centos7 image
