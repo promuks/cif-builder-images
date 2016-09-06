@@ -18,6 +18,7 @@ RUN yum install -y  --enablerepo rhel-7-server-optional-rpms --enablerepo rhel-7
 RUN yum -y install npm; yum clean all
 
 RUN mkdir /opt/app-root
+RUN mkdir /opt/app-root/src/source
 RUN npm install -g  bower grunt-cli tsd
 
 #RUN bower install --allow-root  
