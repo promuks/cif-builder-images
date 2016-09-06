@@ -11,7 +11,7 @@ MAINTAINER Mukul Nadkarni <mnadkarni@atpco.net>
 ENV MAVEN_VERSION 3.3.9
 ENV CATALINA_HOME /usr/local/tomcat
 
-#RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm 
+RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm 
 #RUN rpm -q git-all
 
 #RUN yum install -y  --enablerepo rhel-7-server-optional-rpms --enablerepo rhel-7-server-rpms wget tar unzip bzip2 bc which lsof
