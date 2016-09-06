@@ -11,9 +11,7 @@ MAINTAINER Mukul Nadkarni <mnadkarni@atpco.net>
 ENV CATALINA_HOME /usr/local/tomcat
 ENV JAVA_VERSION 8u45; BUILD_VERSION b14
 
-RUN wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/$JAVA_VERSION-$BUILD_VERSION/jdk-$JAVA_VERSION-linux-x64.rpm" -O /tmp/jdk-8-linux-x64.rpm   && \
-    yum -y install /tmp/jdk-8-linux-x64.rpm && \
-    rm  /tmp/jdk-8-linux-x64.rpm 
+
 
 RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm 
 RUN yum install -y  --enablerepo rhel-7-server-optional-rpms --enablerepo rhel-7-server-rpms wget tar unzip bzip2 which  && \
@@ -24,6 +22,9 @@ RUN yum install -y  --enablerepo rhel-7-server-optional-rpms --enablerepo rhel-7
     yum -y install npm; yum clean all   && \
     npm install -g  bower grunt-cli tsd
     
+RUN wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/$JAVA_VERSION-$BUILD_VERSION/jdk-$JAVA_VERSION-linux-x64.rpm" -O /tmp/jdk-8-linux-x64.rpm   && \
+    yum -y install /tmp/jdk-8-linux-x64.rpm && \
+    rm  /tmp/jdk-8-linux-x64.rpm 
     
 #RUN rpm -q git-all
 
