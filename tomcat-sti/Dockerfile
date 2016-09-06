@@ -1,3 +1,4 @@
+
 # pricingui-tomcat test
 FROM rhel7.2
 
@@ -7,6 +8,7 @@ MAINTAINER Mukul Nadkarni <mnadkarni@atpco.net>
 
 # Install build tools on top of base image
 # Java jdk 8, Maven 3.3
+ENV MAVEN_VERSION 3.3.9
 ENV CATALINA_HOME /usr/local/tomcat
 
 #RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm 
