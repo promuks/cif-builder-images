@@ -57,8 +57,8 @@ RUN chmod -R a+rwX /usr/local/sti/usage
 RUN chmod +x /usr/local/sti/assemble /usr/local/sti/run /usr/local/sti/save-artifacts /usr/local/sti/usage
 RUN chmod +x /run/httpd
 RUN chmod +x /run/httpd/*
-RUN mkdir /var/www/html
-RUN chmod +x /var/www/html/*
+#RUN mkdir /var/www/html
+RUN chmod +x /var/www/html
 # Set the default port for applications built using this image
 # TODO: Set the default port for applications built using this image
 EXPOSE 8080
