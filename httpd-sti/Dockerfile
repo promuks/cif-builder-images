@@ -87,7 +87,7 @@ RUN sed -i \
     chown -R 1001:0  /opt/app-root /tmp/sessions
 
 
-
+RUN cat /etc/sysconfig/httpd.conf 
 
 USER 1001
 # Set the default CMD for the image
