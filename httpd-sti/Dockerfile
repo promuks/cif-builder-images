@@ -17,7 +17,7 @@ RUN yum install -y  --enablerepo rhel-7-server-optional-rpms --enablerepo rhel-7
 
 RUN yum -y install npm; yum clean all
 
-
+RUN mkdir /opt/app-root
 RUN npm install -g  bower grunt-cli tsd
 
 #RUN bower install --allow-root  
@@ -83,7 +83,7 @@ RUN sed -i \
     mkdir /tmp/sessions && \
     chmod -R a+rwx /var/run/httpd && \
     chmod -R a+rwx /tmp/sessions && \
-    chown -R 1001:0  /tmp/sessions
+    chown -R 1001:0  /opt/app-root /tmp/sessions
 
 
 
