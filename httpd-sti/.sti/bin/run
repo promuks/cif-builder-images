@@ -8,6 +8,6 @@
 #
 
 #exec /usr/local/tomcat/bin/catalina.sh run
-rm -rf /run/httpd/*
+#rm -rf /run/httpd/*
 
-exec /usr/sbin/apachectl -D FOREGROUND
+#exec /usr/sbin/apachectl -D FOREGROUND
