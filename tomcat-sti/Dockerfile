@@ -24,7 +24,7 @@ RUN yum install -y  --enablerepo rhel-7-server-optional-rpms --enablerepo rhel-7
     npm install -g  bower grunt-cli tsd
     
 #RUN wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/$JAVA_VERSION-$BUILD_VERSION/jdk-$JAVA_VERSION-linux-x64.rpm" -O /tmp/jdk-8-linux-x64.rpm   && \
-RUN wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn/java/jdk/$JAVA_VERSION-$BUILD_VERSION/jre-$JAVA_VERSION-linux-x64.rpm" -O /tmp/jdk-8-linux-x64.rpm   && \
+RUN wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/$JAVA_VERSION-$BUILD_VERSION/jre-$JAVA_VERSION-linux-x64.rpm" -O /tmp/jdk-8-linux-x64.rpm   && \
     yum -y install /tmp/jdk-8-linux-x64.rpm && \
     yum clean all  && \
     rm  /tmp/jdk-8-linux-x64.rpm 
