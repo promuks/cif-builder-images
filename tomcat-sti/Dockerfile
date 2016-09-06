@@ -7,7 +7,6 @@ MAINTAINER Mukul Nadkarni <mnadkarni@atpco.net>
 
 # Install build tools on top of base image
 # Java jdk 8, Maven 3.3
-ENV MAVEN_VERSION 3.3.9
 ENV CATALINA_HOME /usr/local/tomcat
 
 #RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm 
@@ -22,22 +21,6 @@ RUN yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     rpm -V $INSTALL_PKGS && \
     yum clean all -y
     
-    
-
-
-ENV JAVA_VERSION 8u45
-ENV BUILD_VERSION b14
-
-# Upgrading system
-RUN yum -y upgrade
-RUN yum -y install wget
-
-
-
-# Downloading Java
-RUN wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/$JAVA_VERSION-$BUILD_VERSION/jdk-$JAVA_VERSION-linux-x64.rpm" -O /tmp/jdk-8-linux-x64.rpm
-
-RUN yum -y install /tmp/jdk-8-linux-x64.rpm
 
 RUN wget http://apache.spinellicreations.com/tomcat/tomcat-8/v8.0.36/bin/apache-tomcat-8.0.36.tar.gz && \
 	tar -xvf apache-tomcat-8.0.36.tar.gz && \
@@ -53,14 +36,9 @@ RUN git config --global user.email "mukul37@gmail.com"
 RUN git config --global user.name "Mukul"
 #RUN yum -y update; yum clean all
 RUN yum -y install npm; yum clean all
-
-
 RUN npm install -g  bower grunt-cli tsd
 
 #RUN bower install --allow-root  
-
-ENV PATH=/opt/maven/bin/:$PATH
-
 
 ENV BUILDER_VERSION 1.0
 
@@ -77,8 +55,6 @@ LABEL io.openshift.s2i.scripts-url=image:///usr/local/sti
 #LABEL io.openshift.s2i.destination=image:///usr/local/src
 
 COPY .sti/bin/ /usr/local/sti
-ADD scripts/ /usr/local/tomcat/bin
-ADD ldapcert /usr/local/tomcat/certs
 RUN useradd -u 1001 testac
 RUN chown -R 1001:1001 /opt/openshift
 #RUN chown -R 1001:1001 /usr/local/sti/* 
@@ -90,9 +66,9 @@ RUN chmod -R a+rwX /usr/local/sti/assemble
 RUN chmod -R a+rwX /usr/local/sti/run
 RUN chmod -R a+rwX /usr/local/sti/save-artifacts
 RUN chmod -R a+rwX /usr/local/sti/usage
-RUN chmod -R ug+rwx /usr/local/tomcat/bin/addldapcert.sh
+
 RUN chmod +x /usr/local/sti/assemble /usr/local/sti/run /usr/local/sti/save-artifacts /usr/local/sti/usage
-RUN /usr/local/tomcat/bin/addldapcert.sh
+
 
 # This default user is created in the openshift/base-centos7 image
 USER 1001
