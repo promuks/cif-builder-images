@@ -12,16 +12,24 @@ ENV MAVEN_VERSION 3.3.9
 ENV CATALINA_HOME /usr/local/tomcat
 
 RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm 
+RUN yum install -y  --enablerepo rhel-7-server-optional-rpms --enablerepo rhel-7-server-rpms wget tar unzip bzip2 which  && \
+    yum -y install git; yum clean all  && \
+    git config --global url."https://".insteadOf git://   && \
+    git config --global user.email "mukul37@gmail.com"   && \
+    git config --global user.name "Mukul"   && \
+    yum -y install npm; yum clean all   && \
+    npm install -g  bower grunt-cli tsd
+    
 #RUN rpm -q git-all
 
 #RUN yum install -y  --enablerepo rhel-7-server-optional-rpms --enablerepo rhel-7-server-rpms wget tar unzip bzip2 bc which lsof
-RUN yum-config-manager --enable rhel-server-rhscl-7-rpms && \
-    yum-config-manager --enable rhel-7-server-optional-rpms && \
-    yum-config-manager --disable epel >/dev/null || : && \
-    INSTALL_PKGS=" wget tar bzip2" && \
-    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
-    rpm -V $INSTALL_PKGS && \
-    yum clean all -y
+#RUN yum-config-manager --enable rhel-server-rhscl-7-rpms && \
+#    yum-config-manager --enable rhel-7-server-optional-rpms && \
+#    yum-config-manager --disable epel >/dev/null || : && \
+#    INSTALL_PKGS=" wget tar bzip2" && \
+#    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+#    rpm -V $INSTALL_PKGS && \
+#    yum clean all -y
     
 #nodejs010 nodejs010-nodejs-nodemon
 RUN wget http://apache.spinellicreations.com/tomcat/tomcat-8/v8.0.36/bin/apache-tomcat-8.0.36.tar.gz && \
@@ -32,13 +40,14 @@ RUN wget http://apache.spinellicreations.com/tomcat/tomcat-8/v8.0.36/bin/apache-
     mkdir -p /opt/app-root/source && chmod -R a+rwX /opt/app-root/source && \
     mkdir -p /opt/s2i/destination && chmod -R a+rwX /opt/s2i/destination && \
     mkdir -p /opt/app-root/src && chmod -R a+rwX /opt/app-root/src
-RUN yum -y install git; yum clean all
-RUN git config --global url."https://".insteadOf git://
-RUN git config --global user.email "mukul37@gmail.com" 
-RUN git config --global user.name "Mukul"
+#RUN yum -y install git; yum clean all
+#RUN git config --global url."https://".insteadOf git://
+#RUN git config --global user.email "mukul37@gmail.com" 
+#RUN git config --global user.name "Mukul"
 #RUN yum -y update; yum clean all
-RUN yum -y install npm; yum clean all
-RUN npm install -g  bower grunt-cli tsd
+
+#RUN yum -y install npm; yum clean all
+#RUN npm install -g  bower grunt-cli tsd
 
 #RUN bower install --allow-root  
 
