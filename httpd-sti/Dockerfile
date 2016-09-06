@@ -58,12 +58,19 @@ RUN chmod +x /run/httpd
 RUN chmod +x /run/httpd/*
 
 
-# This default user is created in the openshift/base-centos7 image
-USER 1001
+
 
 # Set the default port for applications built using this image
 EXPOSE 80
 
 # Set the default CMD for the image
 # CMD ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/opt/openshift/app.jar"]
-CMD ["usage"]
+#CMD ["usage"]
+# Simple startup script to avoid some issues observed with container restart 
+ADD run-apache.sh /run-apache.sh
+RUN chmod -v +x /run-apache.sh
+
+CMD ["/run-apache.sh"]
+
+# This default user is created in the openshift/base-centos7 image
+USER 1001
